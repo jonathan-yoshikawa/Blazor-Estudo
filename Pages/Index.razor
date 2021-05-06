@@ -1,4 +1,17 @@
 ﻿@page "/"
 
 @using BlazorProducts.Components
-<Home  Title="Bem vindo ao aplicativo BlazorProducts."></Home>
+
+<Home  Title="Bem vindo ao aplicativo BlazorProducts."
+      @attributes="AdditionalAttributes"></Home>
+
+@code {
+    public Dictionary<string, object> AdditionalAttributes { get; set; } =
+        new Dictionary<string, object>
+        {
+            { "src", "/assets/blazor-logo.png" },
+            { "alt", "products image for the Home component" },
+            { "width", 100 },
+            { "height", 100 }
+        };
+}
