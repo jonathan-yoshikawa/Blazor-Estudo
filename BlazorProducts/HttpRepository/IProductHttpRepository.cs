@@ -1,0 +1,11 @@
+﻿using Entities.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace BlazorProducts.HttpRepository
+{
+    public interface IProductHttpRepository
+    {
+        Task<List<Product>> GetProducts();
+    }
+}
