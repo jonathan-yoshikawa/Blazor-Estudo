@@ -1,4 +1,7 @@
-﻿using Entities.Models;
+﻿using BlazorProducts.Features;
+using Entities.Models;
+using Entities.RequestFeatures;
+using Microsoft.AspNetCore.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +18,27 @@ namespace BlazorProducts.HttpRepository
         {
             _client = client;
         }
-        public async Task<List<Product>> GetProducts()
+        public async Task<PagingResponse<Product>> GetProducts(ProductParameters productParameters)
         {
-            var response = await _client.GetAsync("products");
+            var queryStringParam = new Dictionary<string, string>
+            {
+                ["pageNumber"] = productParameters.PageNumber.ToString()
+            };
+            var response = await _client.GetAsync(QueryHelpers.AddQueryString("https://localhost:5011/api/products", queryStringParam));
             var content = await response.Content.ReadAsStringAsync();
-            var products = JsonSerializer.Deserialize<List<Product>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            return products;
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(content);
+            }
+
+            var pagingResponse = new PagingResponse<Product>
+            {
+                Items = JsonSerializer.Deserialize<List<Product>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }),
+                MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+            };
+            
+            return pagingResponse;
         }
     }
 }
