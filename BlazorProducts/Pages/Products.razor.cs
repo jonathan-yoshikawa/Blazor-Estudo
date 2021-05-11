@@ -29,6 +29,14 @@ namespace BlazorProducts.Pages
             await GetProducts();
         }
 
+        private async Task SearchChanged(string searchTerm)
+        {
+            Console.WriteLine(searchTerm);
+            _productParameters.PageNumber = 1;
+            _productParameters.SearchTerm = searchTerm;
+            await GetProducts();
+        }
+
         private async Task GetProducts()
         {
             var pagingResponse = await ProductRepo.GetProducts(_productParameters);

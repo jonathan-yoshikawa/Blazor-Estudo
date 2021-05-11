@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BlazorProducts.Pages.ProductTable
+namespace BlazorProducts.Components.ProductTable
 {
     public partial class ProductTable
     {
